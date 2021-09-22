@@ -1,11 +1,19 @@
 FROM node:16-alpine
 
-COPY package*.json ./
+WORKDIR /usr/src/app
 
-RUN npm install
+COPY package.json .
 
-EXPOSE 8080
+COPY package-lock.json .
 
-CMD [ "node", "app.js" ]
+RUN npm install && npm install typescript -g
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 5000
+
+CMD [ "node", "./build/index.js" ]
 
 
